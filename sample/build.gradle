@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'net.ltgt.apt'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(':stiletto-common')
+    apt project(':stiletto-compiler')
+    apt 'com.google.dagger:dagger-compiler:2.5'
+}

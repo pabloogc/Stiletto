@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Stiletto.iml" filepath="$PROJECT_DIR$/.idea/modules/Stiletto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample.iml" group="sample" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample_main.iml" group="sample" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample_test.iml" group="sample" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common.iml" group="stiletto-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common_main.iml" group="stiletto-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-common/stiletto-common_test.iml" group="stiletto-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler.iml" group="stiletto-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler_main.iml" group="stiletto-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stiletto-compiler/stiletto-compiler_test.iml" group="stiletto-compiler" />
+    </modules>
+  </component>
+</project>
