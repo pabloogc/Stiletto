@@ -4,10 +4,11 @@ public class App {
 
     public static void main(String[] args) {
 
-//        DummyComponent dummyComponent = DaggerDummyComponent.builder().dummyModule(
-//                DummyModule.builder()
-//                        .hello("hey")
-//                        .build()
-//        ).build();
+        DaggerMyApplicationComponent.builder()
+                .myApplicationModule(MyApplicationModule.builder()
+                        .context(() -> {
+                            System.out.println("I'm a context!");
+                        })
+                        .build());
     }
 }
