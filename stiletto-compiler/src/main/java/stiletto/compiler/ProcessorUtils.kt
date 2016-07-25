@@ -1,10 +1,10 @@
 package stiletto.compiler
 
-import stiletto.compiler.ProcessorUtils.env
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
+import stiletto.compiler.ProcessorUtils.env
 import java.util.*
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.*
@@ -12,7 +12,6 @@ import javax.lang.model.type.*
 import javax.lang.model.util.ElementKindVisitor6
 import javax.tools.Diagnostic
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty1
 
 object ProcessorUtils {
    lateinit var env: ProcessingEnvironment
@@ -68,16 +67,20 @@ fun Element.findMethodOrNull(p: (ExecutableElement) -> Boolean): ExecutableEleme
 }
 
 val Element.isMethod: Boolean get() = this.kind == ElementKind.METHOD
+val Element.isConstructor: Boolean get() = this.kind == ElementKind.CONSTRUCTOR
 val Element.isInterface: Boolean get() = this.kind == ElementKind.INTERFACE
 val Element.isAbstract: Boolean get() = this.modifiers.contains(Modifier.ABSTRACT)
 val ExecutableElement.isVoid: Boolean get() = this.returnType.kind == TypeKind.VOID
+val ExecutableElement.isNullable: Boolean
+   //There are multiple nullables: Android and JetBrains for example, they mean the same
+   get() = this.copyAnnotations().any { it.type.toString().endsWith(".Nullable") }
 
-fun TypeMirror.implements(base: KClass<*>): Boolean {
-   return this.implements(base.asTypeMirror())
+infix fun TypeMirror.assignableTo(base: TypeMirror): Boolean {
+   return env.typeUtils.isAssignable(base, this)
 }
 
-fun TypeMirror.implements(base: TypeMirror): Boolean {
-   return env.typeUtils.isAssignable(this, base)
+infix fun TypeMirror.isSubtypeOf(base: TypeMirror): Boolean {
+   return env.typeUtils.isSubtype(this, base)
 }
 
 fun ExecutableElement.sameMethodSignature(other: ExecutableElement): Boolean {
@@ -110,25 +113,7 @@ val TypeElement.allEnclosedElements: List<Element> get() = env.elementUtils.getA
 // Annotation Utilities
 //####################
 
-fun <T : Annotation> T.typeMirrors(property: KProperty1<T, Array<KClass<*>>>): List<TypeMirror> {
-   try {
-      property.get(this)
-   } catch(ex: MirroredTypesException) {
-      return ex.typeMirrors
-   }
-   throw IllegalArgumentException("Property is not a Class<?>[]")
-}
-
-fun <T : Annotation> T.typeMirror(property: KProperty1<T, KClass<*>>): TypeMirror {
-   try {
-      property.get(this)
-   } catch(ex: MirroredTypeException) {
-      return ex.typeMirror
-   }
-   throw IllegalArgumentException("Property is not a Class<?>")
-}
-
-fun Annotation.typeMirror(access: () -> Class<*>): TypeMirror {
+fun <T : Annotation> T.typeMirror(access: T.() -> KClass<*>): TypeMirror {
    try {
       access()
    } catch(ex: MirroredTypeException) {
@@ -137,7 +122,7 @@ fun Annotation.typeMirror(access: () -> Class<*>): TypeMirror {
    throw IllegalArgumentException("Property is not a Class<?>")
 }
 
-fun Annotation.typeMirrors(access: () -> Array<Class<*>>): List<TypeMirror> {
+fun <T : Annotation> T.typeMirrors(access: T.() -> Array<KClass<*>>): List<TypeMirror> {
    try {
       access()
    } catch(ex: MirroredTypesException) {
@@ -147,7 +132,10 @@ fun Annotation.typeMirrors(access: () -> Array<Class<*>>): List<TypeMirror> {
 }
 
 
-fun <T : Annotation> Element.hasAnnotation(type: Class<T>): Boolean = this.getAnnotation(type) != null
+fun <T : Annotation> Element.hasAnnotation(type: Class<T>): Boolean {
+   return this.annotationMirrors
+         .firstOrNull { it.annotationType.toClassName() == ClassName.get(type) } != null
+}
 
 fun TypeMirror.isSameType(other: TypeMirror) = env.typeUtils.isSameType(this, other)
 
@@ -157,6 +145,7 @@ fun TypeMirror.isSameType(other: TypeMirror) = env.typeUtils.isSameType(this, ot
 
 fun logError(message: String, element: Element? = null) {
    logMessage(Diagnostic.Kind.ERROR, message, element)
+   error("Compilation aborted")
 }
 
 fun logWarning(message: String, element: Element? = null) {

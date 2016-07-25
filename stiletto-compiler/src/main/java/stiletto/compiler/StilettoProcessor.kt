@@ -1,6 +1,6 @@
 package stiletto.compiler
 
-import stiletto.Module
+import stiletto.Stiletto.Module
 import java.io.PrintWriter
 import java.io.StringWriter
 import javax.annotation.processing.AbstractProcessor

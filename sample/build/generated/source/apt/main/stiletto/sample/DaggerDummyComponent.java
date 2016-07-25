@@ -9,7 +9,11 @@ import javax.inject.Provider;
   comments = "https://google.github.io/dagger"
 )
 public final class DaggerDummyComponent implements DummyComponent {
-  private Provider<String> provideStringProvider;
+  private Provider<String> provideHelloProvider;
+
+  private Provider<BookLoader> provideLocalBookLoaderProvider;
+
+  private Provider<BookLoader> provideRemoteBookLoaderProvider;
 
   private DaggerDummyComponent(Builder builder) {
     assert builder != null;
@@ -20,35 +24,48 @@ public final class DaggerDummyComponent implements DummyComponent {
     return new Builder();
   }
 
-  public static DummyComponent create() {
-    return builder().build();
-  }
-
   @SuppressWarnings("unchecked")
   private void initialize(final Builder builder) {
 
-    this.provideStringProvider =
-        DummyComponent_DummyModule_ProvideStringFactory.create(builder.dummyModule);
+    this.provideHelloProvider = DummyModule_ProvideHelloFactory.create(builder.dummyModule);
+
+    this.provideLocalBookLoaderProvider =
+        DummyModule_ProvideLocalBookLoaderFactory.create(
+            builder.dummyModule, LocalBookLoader_Factory.create());
+
+    this.provideRemoteBookLoaderProvider =
+        DummyModule_ProvideRemoteBookLoaderFactory.create(
+            builder.dummyModule, provideLocalBookLoaderProvider);
   }
 
   @Override
-  public String provideString() {
-    return provideStringProvider.get();
+  public String hello() {
+    return provideHelloProvider.get();
+  }
+
+  @Override
+  public BookLoader localBookLoader() {
+    return provideLocalBookLoaderProvider.get();
+  }
+
+  @Override
+  public BookLoader remoteBookLoader() {
+    return provideRemoteBookLoaderProvider.get();
   }
 
   public static final class Builder {
-    private DummyComponent.DummyModule dummyModule;
+    private DummyModule dummyModule;
 
     private Builder() {}
 
     public DummyComponent build() {
       if (dummyModule == null) {
-        this.dummyModule = new DummyComponent.DummyModule();
+        throw new IllegalStateException(DummyModule.class.getCanonicalName() + " must be set");
       }
       return new DaggerDummyComponent(this);
     }
 
-    public Builder dummyModule(DummyComponent.DummyModule dummyModule) {
+    public Builder dummyModule(DummyModule dummyModule) {
       this.dummyModule = Preconditions.checkNotNull(dummyModule);
       return this;
     }

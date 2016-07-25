@@ -1,24 +1,26 @@
 package stiletto.sample;
 
 
-import stiletto.ProvidedBy;
-import stiletto.Module;
+import org.jetbrains.annotations.Nullable;
+
+import javax.inject.Named;
+
 import dagger.Component;
-import dagger.Provides;
+import stiletto.ProvidedBy;
+import stiletto.Stiletto;
 
-@Component(modules = DummyComponent.DummyModule.class)
-@Module
-public interface DummyComponent {
+@Stiletto.Module
+@Component(modules = DummyModule.class)
+interface DummyComponent {
 
-    @ProvidedBy.Constructor
-    String provideString();
+    @ProvidedBy.Runtime
+    String hello();
 
-    @dagger.Module
-    class DummyModule {
+    @Named("local")
+    @ProvidedBy.Injection(LocalBookLoader.class)
+    BookLoader localBookLoader();
 
-        @Provides
-        String provideString() {
-            return "HEY";
-        }
-    }
+    @Named("remote")
+    @ProvidedBy.NewInstance(RemoteBookLoader.class)
+    BookLoader remoteBookLoader();
 }
