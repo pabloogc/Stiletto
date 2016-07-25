@@ -14,5 +14,6 @@ public interface Stiletto {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface Module {
+        String moduleName() default "";
     }
 }

@@ -7,7 +7,7 @@ import dagger.Component;
 import stiletto.ProvidedBy;
 import stiletto.Stiletto;
 
-@Stiletto.Module
+@Stiletto.Module(moduleName = "QualifiedSampleModule")
 //@Component Can't have @Component here
 interface QualifierInject {
 

@@ -6,7 +6,6 @@ import dagger.Provides
 import stiletto.ProvidedBy
 import stiletto.Stiletto.Module
 import java.util.*
-import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
@@ -36,10 +35,16 @@ class StilettoModule(val annotatedClass: TypeElement) {
 
       val elementClassName = ClassName.get(annotatedClass)
       val componentSuffixIndex = elementClassName.simpleName().lastIndexOf("Component")
-      val moduleSimpleName = if (insideDaggerComponent && componentSuffixIndex > 0) {
-         elementClassName.simpleName().substring(0, componentSuffixIndex) + "Module"
+
+      val moduleSimpleName: String
+      if (moduleAnnotation.moduleName.isBlank()) {
+         moduleSimpleName = if (insideDaggerComponent && componentSuffixIndex > 0) {
+            elementClassName.simpleName().substring(0, componentSuffixIndex) + "Module"
+         } else {
+            elementClassName.simpleName() + "Module"
+         }
       } else {
-         elementClassName.simpleName() + "Module"
+         moduleSimpleName = moduleAnnotation.moduleName
       }
 
       moduleClassName = ClassName.get(elementClassName.packageName(), moduleSimpleName)
