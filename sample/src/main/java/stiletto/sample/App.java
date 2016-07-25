@@ -6,9 +6,7 @@ public class App {
 
         DaggerMyApplicationComponent.builder()
                 .myApplicationModule(MyApplicationModule.builder()
-                        .context(() -> {
-                            System.out.println("I'm a context!");
-                        })
+                        .context(() -> System.out.println("I'm a context!"))
                         .build());
     }
 }

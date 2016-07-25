@@ -22,23 +22,23 @@ class StilettoModule(val annotatedClass: TypeElement) {
       )
    }
 
-   val insideDaggerComponent: Boolean
+   val isDaggerComponent: Boolean
 
    val moduleClassName: ClassName
    val builderClassName: ClassName
 
-   val moduleAnnotation = annotatedClass.getAnnotation(Module::class.java)
    val providedTypes: List<ProvidedType>
 
    init {
-      insideDaggerComponent = annotatedClass.hasAnnotation(Component::class.java)
+      isDaggerComponent = annotatedClass.hasAnnotation(Component::class.java)
 
       val elementClassName = ClassName.get(annotatedClass)
       val componentSuffixIndex = elementClassName.simpleName().lastIndexOf("Component")
 
+      val moduleAnnotation = annotatedClass.getAnnotation(Module::class.java)
       val moduleSimpleName: String
       if (moduleAnnotation.moduleName.isBlank()) {
-         moduleSimpleName = if (insideDaggerComponent && componentSuffixIndex > 0) {
+         moduleSimpleName = if (isDaggerComponent && componentSuffixIndex > 0) {
             elementClassName.simpleName().substring(0, componentSuffixIndex) + "Module"
          } else {
             elementClassName.simpleName() + "Module"
@@ -120,7 +120,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
       val moduleConstructorMethod = MethodSpec.constructorBuilder()
             .addModifiers(Modifier.PUBLIC)
 
-      //Generate the corresponding builder method and field
+      //Generate the corresponding builder method and field in the component
       runtimeTypes.forEach {
          builderTypeSpec
                .addField(it.typeName, it.uniqueName, Modifier.PRIVATE)
@@ -132,8 +132,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
                      .returns(builderClassName)
                      .build())
 
-         moduleTypeSpec
-               .addField(it.typeName, it.uniqueName, Modifier.PRIVATE, Modifier.FINAL)
+         moduleTypeSpec.addField(it.typeName, it.uniqueName, Modifier.PRIVATE, Modifier.FINAL)
 
          moduleConstructorMethod
                .addParameter(it.typeName, it.uniqueName)
@@ -151,12 +150,11 @@ class StilettoModule(val annotatedClass: TypeElement) {
                .build())
       }
 
-      builderTypeSpec
-            .addMethod(builderBuildMethod
-                  .addStatement("return new \$T(\$L)", moduleClassName,
-                        runtimeTypes.joinToString(separator = ", ") { it.uniqueName })
-                  .returns(moduleClassName)
-                  .build())
+      builderTypeSpec.addMethod(builderBuildMethod
+            .addStatement("return new \$T(\$L)", moduleClassName,
+                  runtimeTypes.joinToString(separator = ", ") { it.uniqueName })
+            .returns(moduleClassName)
+            .build())
 
       moduleTypeSpec.addMethod(moduleConstructorMethod.build())
 
@@ -170,7 +168,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
       //if all types are nullable add the create method shortcut
       if (runtimeTypes.isEmpty() || runtimeTypes.all { it.nullable }) {
          moduleTypeSpec.addMethod(MethodSpec.methodBuilder("create")
-               .addJavadoc("Create the module with default values (null, 0)")
+               .addJavadoc("Create the module with default null values.")
                .addModifiers(Modifier.STATIC)
                .addStatement("return builder().build()")
                .returns(moduleClassName)
@@ -181,8 +179,8 @@ class StilettoModule(val annotatedClass: TypeElement) {
 
    }
 
-   sealed class ProvidedType(val stilettoModule: StilettoModule,
-                             val annotatedMethod: ExecutableElement) {
+   sealed class ProvidedType(stilettoModule: StilettoModule,
+                             annotatedMethod: ExecutableElement) {
 
       val typeName: TypeName
       val uniqueName: String
@@ -197,7 +195,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
          nullable = annotatedMethod.isNullable
          provisionMethodName = "provide${uniqueName.capitalize()}"
 
-         if (annotatedMethod.parameters.isNotEmpty() && stilettoModule.insideDaggerComponent) {
+         if (annotatedMethod.parameters.isNotEmpty() && stilettoModule.isDaggerComponent) {
             logError("Methods annotated with @ProvidedBy " +
                   "can't have parameters when declared " +
                   "alongside the dagger @Component", annotatedMethod)

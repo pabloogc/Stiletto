@@ -140,7 +140,7 @@ fun <T : Annotation> Element.hasAnnotation(type: Class<T>): Boolean {
 fun TypeMirror.isSameType(other: TypeMirror) = env.typeUtils.isSameType(this, other)
 
 //####################
-// JavaPoet utilities
+// Log utilities
 //####################
 
 fun logError(message: String, element: Element? = null) {
