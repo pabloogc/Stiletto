@@ -36,7 +36,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
 
       val elementClassName = ClassName.get(annotatedClass)
       val componentSuffixIndex = elementClassName.simpleName().lastIndexOf("Component")
-      val moduleSimpleName = if (componentSuffixIndex > 0) {
+      val moduleSimpleName = if (insideDaggerComponent && componentSuffixIndex > 0) {
          elementClassName.simpleName().substring(0, componentSuffixIndex) + "Module"
       } else {
          elementClassName.simpleName() + "Module"
@@ -134,7 +134,7 @@ class StilettoModule(val annotatedClass: TypeElement) {
                .addParameter(it.typeName, it.uniqueName)
                .addStatement("this.${it.uniqueName} = ${it.uniqueName}")
 
-         if (!it.nullable) { //Add null check
+         if (!it.nullable && !it.typeName.isPrimitive) { //Add null check
             builderBuildMethod.addStatement(
                   "if(${it.uniqueName} == null) " +
                         "throw new NullPointerException(\"${it.uniqueName} == null\")")
@@ -179,7 +179,6 @@ class StilettoModule(val annotatedClass: TypeElement) {
    sealed class ProvidedType(val stilettoModule: StilettoModule,
                              val annotatedMethod: ExecutableElement) {
 
-      val typeElement: Element
       val typeName: TypeName
       val uniqueName: String
       val provisionMethodName: String
@@ -188,7 +187,6 @@ class StilettoModule(val annotatedClass: TypeElement) {
       val parameterQualifiers: List<AnnotationSpec>
 
       init {
-         typeElement = annotatedMethod.returnType.asElement()
          typeName = annotatedMethod.returnType.toTypeName()
          uniqueName = annotatedMethod.simpleName.toString()
          nullable = annotatedMethod.isNullable
