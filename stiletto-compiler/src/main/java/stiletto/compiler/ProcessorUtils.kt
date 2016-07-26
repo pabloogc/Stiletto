@@ -160,8 +160,8 @@ fun logMessage(kind: Diagnostic.Kind, message: String, element: Element? = null)
 // JavaPoet utilities
 //####################
 
-fun MethodSpec.Builder.breakLine() = addCode("\n")
-fun MethodSpec.Builder.addComment(format: String, vararg args: Any?) = addCode("//$format\n", args)
+fun MethodSpec.Builder.breakLine(): MethodSpec.Builder = addCode("\n")
+fun MethodSpec.Builder.addComment(format: String, vararg args: Any?): MethodSpec.Builder = addCode("//$format\n", args)
 
 fun Element.copyAnnotations(vararg exclude: Class<*>): List<AnnotationSpec> {
    val excludedTypeNames = exclude.map { ClassName.get(it) }

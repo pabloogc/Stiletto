@@ -57,9 +57,9 @@ class StilettoModule(val annotatedClass: TypeElement) {
                .forEach {
                   if (it.hasAnnotation(ProvidedBy.Runtime::class.java))
                      methods += ProvidedType.Runtime(this, it)
-                  if (it.hasAnnotation(ProvidedBy.Injection::class.java))
+                  else if (it.hasAnnotation(ProvidedBy.Injection::class.java))
                      methods += ProvidedType.Injection(this, it)
-                  if (it.hasAnnotation(ProvidedBy.NewInstance::class.java))
+                  else if (it.hasAnnotation(ProvidedBy.NewInstance::class.java))
                      methods += ProvidedType.NewInstance(this, it)
                }
          methods

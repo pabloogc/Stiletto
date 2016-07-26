@@ -1,10 +1,5 @@
-apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 buildscript {
     ext.kotlin_version = '1.0.2'
@@ -15,11 +10,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-repositories {
-    mavenCentral()
-}
-
 
 dependencies {
     compile project(':stiletto-common')
@@ -35,4 +25,19 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+}
+
+apply plugin: 'maven'
+
+install {
+    repositories.mavenInstaller {
+        pom.version = libVersion
+        pom.groupId = libGroup
+        pom.artifactId = 'stilleto-compiler'
+    }
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }

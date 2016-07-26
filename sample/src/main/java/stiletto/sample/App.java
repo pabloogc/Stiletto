@@ -6,7 +6,12 @@ public class App {
 
         DaggerMyApplicationComponent.builder()
                 .myApplicationModule(MyApplicationModule.builder()
-                        .context(() -> System.out.println("I'm a context!"))
+                        .context(new AndroidContext() {
+                            @Override
+                            public void doContextThings() {
+                                System.out.println("I'm a context");
+                            }
+                        })
                         .build());
     }
 }
