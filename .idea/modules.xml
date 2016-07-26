@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Stiletto.iml" filepath="$PROJECT_DIR$/.idea/modules/Stiletto.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Stiletto_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Stiletto_main.iml" group="Stiletto" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Stiletto_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Stiletto_test.iml" group="Stiletto" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample.iml" group="sample" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample_main.iml" group="sample" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/sample_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/sample_test.iml" group="sample" />

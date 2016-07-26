@@ -11,6 +11,21 @@ buildscript {
     }
 }
 
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId libGroup
+            version libVersion
+            artifactId 'stiletto-compiler'
+
+            from components.java
+            artifact sourcesJar { classifier "sources" }
+        }
+    }
+}
+
 dependencies {
     compile project(':stiletto-common')
 
@@ -18,6 +33,7 @@ dependencies {
     compile 'com.google.auto.value:auto-value:1.3-rc1'
     compile 'com.google.auto.service:auto-service:1.0-rc2'
     compile 'com.google.auto:auto-common:0.6'
+    compile 'com.google.dagger:dagger:2.5'
 
     testCompile 'junit:junit:4.11'
     testCompile 'com.google.truth:truth:0.27'
@@ -27,17 +43,3 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
-apply plugin: 'maven'
-
-install {
-    repositories.mavenInstaller {
-        pom.version = libVersion
-        pom.groupId = libGroup
-        pom.artifactId = 'stilleto-compiler'
-    }
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}

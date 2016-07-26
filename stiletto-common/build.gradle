@@ -1,18 +1,14 @@
-dependencies {
-    compile 'com.google.dagger:dagger:2.5'
-}
+apply plugin: 'maven-publish'
 
-apply plugin: 'maven'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId libGroup
+            version libVersion
+            artifactId 'stiletto'
 
-install {
-    repositories.mavenInstaller {
-        pom.version = libVersion
-        pom.groupId = libGroup
-        pom.artifactId = 'stilleto'
+            from components.java
+            artifact sourcesJar { classifier "sources" }
+        }
     }
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
 }

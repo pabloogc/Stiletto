@@ -19,12 +19,14 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="sample_main" target="1.8" />
-      <module name="sample_test" target="1.8" />
+      <module name="sample_main" target="1.7" />
+      <module name="sample_test" target="1.7" />
       <module name="stiletto-common_main" target="1.7" />
       <module name="stiletto-common_test" target="1.7" />
       <module name="stiletto-compiler_main" target="1.7" />
       <module name="stiletto-compiler_test" target="1.7" />
+      <module name="Stiletto_main" target="1.7" />
+      <module name="Stiletto_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
