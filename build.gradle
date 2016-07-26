@@ -1,7 +1,7 @@
 buildscript {
     ext {
         libVersion = "1.0"
-        libGroup = "com.github.stiletto"
+        libGroup = "com.pabloogc.stiletto"
     }
 
     repositories {
