@@ -215,7 +215,7 @@ This annotation can only be applied if the class has exactly 1 public constructo
 
 * Find any APT plugin (Android or Java) and include it in your project.
 * Add [jitpack.io](https://jitpack.io) repository. Instructions are detailed in the website.
-* Add the Stiletto dependencies. You can use ```-SNAPSHOT``` or check for a release tag like ```v.1.0.0-alpha```.
+* Add the Stiletto dependencies. You can use ```-SNAPSHOT``` or check for a release tag like ```1.0.1-alpha```.
 ```java
     compile 'com.github.pabloogc.stiletto:stiletto:-SNAPSHOT'
     apt 'com.github.pabloogc.stiletto:stiletto-compiler:-SNAPSHOT'
