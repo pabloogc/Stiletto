@@ -213,4 +213,17 @@ This annotation can only be applied if the class has exactly 1 public constructo
 
 # How to use in your project
 
-Soon™
+* Find any APT plugin (Android or Java) and include it in your project.
+* Add [jitpack.io](https://jitpack.io) repository. Instructions are detailed in the website.
+* Add the Stiletto dependencies. You can use ```-SNAPSHOT``` or check for a release tag like ```v.1.0.0-alpha```.
+```java
+    compile 'com.github.pabloogc.stiletto:stiletto:-SNAPSHOT'
+    apt 'com.github.pabloogc.stiletto:stiletto-compiler:-SNAPSHOT'
+```
+* Add Dagger 2 dependency. Stiletto uses dagger 2.5 annotations, however, they are not included by default (the dependency is only present in the compiler) so can provide your own dagger version.
+```
+    compile 'com.google.dagger:dagger:2.5'
+    apt 'com.google.dagger:dagger-compiler:2.5'
+````
+* Reflect about that module you don't have to write.
+
