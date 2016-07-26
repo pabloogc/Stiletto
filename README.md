@@ -211,17 +211,18 @@ This is also valid
 
 This annotation can only be applied if the class has exactly 1 public constructor. The types (```AndroidContext```) can be qualified and will be carried over to the module declaration. If you have multiple constructors you can use the other two alternatives or simply generate the module class manually.
 
+<br><br>
 # How to use in your project
 
 * Find any APT plugin (Android or Java) and include it in your project.
 * Add [jitpack.io](https://jitpack.io) repository. Instructions are detailed in the website.
 * Add the Stiletto dependencies. You can use ```-SNAPSHOT``` or check for a release tag like ```1.0.1-alpha```.
 ```java
-    compile 'com.github.pabloogc.stiletto:stiletto:-SNAPSHOT'
-    apt 'com.github.pabloogc.stiletto:stiletto-compiler:-SNAPSHOT'
+    compile 'com.github.pabloogc.stiletto:stiletto:1.0.1-alpha'
+    apt 'com.github.pabloogc.stiletto:stiletto-compiler:1.0.1-alpha'
 ```
 * Add Dagger 2 dependency. Stiletto uses dagger 2.5 annotations, however, they are not included by default (the dependency is only present in the compiler) so can provide your own dagger version.
-```
+```java
     compile 'com.google.dagger:dagger:2.5'
     apt 'com.google.dagger:dagger-compiler:2.5'
 ````
